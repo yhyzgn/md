@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/vue.css">
+</head>
+
+<body>
+<div style="width: 1200px; margin: 0 auto;">
+    <p align = "center">
+<img alt="Lute" src="https://b3log.org/images/brand/lute-128.png">
+<br><br>
+一款对中文语境优化的 Markdown 引擎，支持 Go 和 JavaScript<br><br>
+<em>
+千呼万唤始出来 犹抱琵琶半遮面<br>
+转轴拨弦三两声 未成曲调先有情
+</em>
+<br><br>
+<a title="Build Status" target="_blank" href="https://travis-ci.org/88250/lute"><img src="https://img.shields.io/travis/88250/lute.svg?style=flat-square"></a>
+<a title="Go Report Card" target="_blank" href="https://goreportcard.com/report/github.com/88250/lute"><img src="https://goreportcard.com/badge/github.com/88250/lute?style=flat-square"></a>
+<a title="Coverage Status" target="_blank" href="https://coveralls.io/repos/github/88250/lute/badge.svg?branch=master"><img src="https://img.shields.io/coveralls/github/88250/lute.svg?style=flat-square&color=CC9933"></a>
+<a title="Code Size" target="_blank" href="https://github.com/88250/lute"><img src="https://img.shields.io/github/languages/code-size/88250/lute.svg?style=flat-square"></a>
+<a title="MulanPSL" target="_blank" href="https://github.com/88250/lute/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MulanPSL-orange.svg?style=flat-square"></a>
+<br>
+<a title="GitHub Commits" target="_blank" href="https://github.com/88250/lute/commits/master"><img src="https://img.shields.io/github/commit-activity/m/88250/lute.svg?style=flat-square"></a>
+<a title="Last Commit" target="_blank" href="https://github.com/88250/lute/commits/master"><img src="https://img.shields.io/github/last-commit/88250/lute.svg?style=flat-square&color=FF9900"></a>
+<a title="GitHub Pull Requests" target="_blank" href="https://github.com/88250/lute/pulls"><img src="https://img.shields.io/github/issues-pr-closed/88250/lute.svg?style=flat-square&color=FF9966"></a>
+<a title="Hits" target="_blank" href="https://github.com/88250/hits"><img src="https://hits.b3log.org/88250/lute.svg"></a>
+<br><br>
+<a title="GitHub Watchers" target="_blank" href="https://github.com/88250/lute/watchers"><img src="https://img.shields.io/github/watchers/88250/lute.svg?label=Watchers&style=social"></a>  
+<a title="GitHub Stars" target="_blank" href="https://github.com/88250/lute/stargazers"><img src="https://img.shields.io/github/stars/88250/lute.svg?label=Stars&style=social"></a>  
+<a title="GitHub Forks" target="_blank" href="https://github.com/88250/lute/network/members"><img src="https://img.shields.io/github/forks/88250/lute.svg?label=Forks&style=social"></a>  
+<a title="Author GitHub Followers" target="_blank" href="https://github.com/88250"><img src="https://img.shields.io/github/followers/88250.svg?label=Followers&style=social"></a>
+</p>
+<p align="center">
+<a href="https://github.com/88250/lute/blob/master/README_en_US.md">English</a>
+</p>
+<h2>💡 简介</h2>
+<p class="indent--2"><a href="https://github.com/88250/lute">Lute</a> 是一款结构化的 Markdown 引擎，完整实现了最新的 <a href="https://github.github.com/gfm/">GFM</a>/<a href="https://commonmark.org">CommonMark</a> 规范，对中文语境支持更好。</p>
+<p class="indent--2">欢迎到 <a href="https://ld246.com/tag/lute">Lute 官方讨论区</a>了解更多。同时也欢迎关注 B3log 开源社区微信公众号 <code>B3log开源</code>：</p>
+<p class="indent--2"><img src="https://b3logfile.com/file/2020/08/b3logos-032af045.jpg" alt="b3logos.jpg" /></p>
+<h2>📽️ 背景</h2>
+<blockquote>
+<p>sdsdf</p>
+</blockquote>
+<p class="indent--2">之前我一直在使用其他 Markdown 引擎，它们或多或少都有些“瑕疵”：</p>
+<ul>
+<li>对标准规范的支持不一致</li>
+<li>对“怪异”文本处理非常耗时，甚至挂死</li>
+<li>对中文支持不够好</li>
+</ul>
+<p class="indent--2">Lute 的目标是构建一个结构化的 Markdown 引擎，实现 GFM/CM 规范并对中文提供更好的支持。所谓的“结构化”指的是从输入的 MD 文本构建抽象语法树，通过操作树来进行 HTML 输出、原文格式化等。<br />
+实现规范是为了保证 Markdown 渲染不存在二义性，让同一份 Markdown 文本可以在实现规范的 Markdown 引擎处理后得到一样的结果，这一点非常重要。</p>
+<p class="indent--2">实现规范的引擎并不多，我想试试看自己能不能写上一个，这也是 Lute 的动机之一。关于如何实现一个 Markdown 引擎，网上众说纷纭：</p>
+<ul>
+<li>有的人说 Markdown 适合用正则解析，因为文法规则太简单</li>
+<li>也有的人说 Markdown 可以用编译原理来处理，正则太难维护</li>
+</ul>
+<p class="indent--2">我赞同后者，因为正则确实太难维护而且运行效率较低。最重要的原因是符合 GFM/CM 规范的 Markdown 引擎的核心解析算法不可能用正则写出来，因为规范定义的规则实在是太复杂了。</p>
+<p class="indent--2">最后，还有一个很重要的动机就是 B3log 开源社区需要一款自己的 Markdown 引擎：</p>
+<ul>
+<li><a href="https://github.com/88250/solo">Solo</a>、<a href="https://github.com/88250/pipe">Pipe</a>、<a href="https://github.com/88250/symphony">Sym</a> 需要效果统一的 Markdown 渲染，并且性能非常重要</li>
+<li><a href="https://github.com/Vanessa219/vditor">Vditor</a> 需要一款结构化的引擎作为支撑以实现下一代的 Markdown 编辑器</li>
+</ul>
+<h2>✨  特性</h2>
+<ul>
+<li>实现最新版 GFM/CM 规范</li>
+<li>零正则，非常快</li>
+<li>内置代码块语法高亮</li>
+<li>对中文语境支持更好</li>
+<li>术语拼写修正</li>
+<li>Markdown 格式化</li>
+<li>Emoji 解析</li>
+<li>HTML 转换 Markdown</li>
+<li>自定义渲染函数</li>
+<li>支持 JavaScript 端使用</li>
+</ul>
+<h2>🗃 案例</h2>
+<ul>
+<li><a href="https://ld246.com">链滴</a></li>
+<li><a href="https://github.com/siyuan-note/siyuan">思源笔记</a></li>
+</ul>
+<h2>🇨🇳 中文语境优化</h2>
+<ul>
+<li>自动链接识别加强</li>
+<li>在中西文间自动插入空格</li>
+<li>英文标点替换为中文标点</li>
+</ul>
+<h2>♍ 格式化</h2>
+<p class="indent--2">格式化功能可将“不整洁”的 Markdown 文本格式化为统一风格，在需要公共编辑的场景下，统一的排版风格能让大家更容易协作。</p>
+<details>
+<summary>点此展开格式化示例。</summary>
+<br>
+Markdown 原文：
+<pre style="background-color: #f0f0f0"><code class="language-md"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#000080;font-weight:bold"># ATX 标题也有可能需要格式化的 ##
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#000080;font-weight:bold"></span>一个简短的段落。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>Setext 说实话我不喜欢 Setext 标题
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>----
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#007020;font-weight:bold">0.</span> 有序列表可以从 0 开始
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#007020;font-weight:bold">0.</span> 应该自增序号的
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#007020;font-weight:bold">1.</span>   对齐对齐对齐
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>我们再来看看另一个有序列表。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#007020;font-weight:bold">1.</span> 没空行的情况下序号要从 1 开始才能打断段落开始一个新列表
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#007020;font-weight:bold">3.</span> 虽然乱序不影响渲染
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#007020;font-weight:bold">2.</span> 但是随意写序号容易引起误解
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>试下贴段代码：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#4070a0">```go
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#4070a0"></span><span style="color:#007020;font-weight:bold">package</span> main
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#007020;font-weight:bold">import</span> <span style="color:#4070a0">&#34;fmt&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  fmt.<span style="color:#06287e">Println</span>(<span style="color:#4070a0">&#34;Hello, 世界&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#4070a0">```</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>对了，缩进代码块建议换成围栏代码块：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    缩进代码块太隐晦了
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    也没法指定编程语言，容易导致代码高亮失效
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    所以建议大家用 ``` 围栏代码块
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>试下围栏代码块匹配场景：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>````markdown
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>围栏代码块只要开头的 <span style="color:#4070a0">` 和结束的 `</span> 数量匹配即可，这样可以实现在围栏代码块中显示围栏代码块：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#4070a0">```
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#4070a0"></span>这里只有 3 个 `，所以不会匹配markdown代码块结束
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#4070a0">```</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>下面匹配到就真的结束了。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>````
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>以上块级内容都挤在一坨了，插入合理的空行也很有必要。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>但是过多的空行分段也不好啊，用来分段的话一个空行就够了。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>接下来让我们试试稍微复杂点的场景，比如列表项包含多个段落的情况：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#007020;font-weight:bold">1.</span> 列表项中的第一段
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>   这里是第二个段落，贴段代码：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>   ```markdown
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>   要成为Markdown程序员并不容易，同理PPT架构师也是。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>   注意代码块中的中西文间并没有插入空格。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>   ```
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>   这里是最后一段了。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span style="color:#007020;font-weight:bold">1.</span> 整个有序列表是“松散”的：列表项内容要用 <span style="color:#4070a0">`&lt;p&gt;`</span> 标签
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>最后，我们试下对 GFM 的格式化支持：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>|col1|col2  |       col3   |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>---           |---------------|--
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>col1 without left pipe      |   this is col2   | col3 without right pipe
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>                                 ||need align cell|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span style="font-weight:bold">**以上就是为什么我们需要Markdown Format，而且是带中西文自动空格的格式化。**</span>
+</code></pre>
+<p class="indent--2">格式化后：</p>
+<pre style="background-color: #f0f0f0"><code class="language-md"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#000080;font-weight:bold"># ATX 标题也有可能需要格式化的
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#000080;font-weight:bold"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>一个简短的段落。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#800080;font-weight:bold">## Setext 说实话我不喜欢 Setext 标题
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#800080;font-weight:bold"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#007020;font-weight:bold">0.</span> 有序列表可以从 0 开始
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#007020;font-weight:bold">1.</span> 应该自增序号的
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#007020;font-weight:bold">2.</span> 对齐对齐对齐
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>我们再来看看另一个有序列表。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#007020;font-weight:bold">1.</span> 没空行的情况下序号要从 1 开始才能打断段落开始一个新列表
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#007020;font-weight:bold">2.</span> 虽然乱序不影响渲染
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#007020;font-weight:bold">3.</span> 但是随意写序号容易引起误解
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>试下贴段代码：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#4070a0">```go
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#4070a0"></span><span style="color:#007020;font-weight:bold">package</span> main
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#007020;font-weight:bold">import</span> <span style="color:#4070a0">&#34;fmt&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  fmt.<span style="color:#06287e">Println</span>(<span style="color:#4070a0">&#34;Hello, 世界&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#4070a0">```</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>对了，缩进代码块建议换成围栏代码块：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#4070a0">```
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#4070a0"></span>缩进代码块太隐晦了
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>也没法指定编程语言，容易导致代码高亮失效
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>所以建议大家用 ``` 围栏代码块
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#4070a0">```</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>试下围栏代码块匹配场景：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>````markdown
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>围栏代码块只要开头的 <span style="color:#4070a0">` 和结束的 `</span> 数量匹配即可，这样可以实现在围栏代码块中显示围栏代码块：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#4070a0">```
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#4070a0"></span>这里只有 3 个 `，所以不会匹配markdown代码块结束
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#4070a0">```</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>下面匹配到就真的结束了。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>````
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>以上块级内容都挤在一坨了，插入合理的空行也很有必要。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>但是过多的空行分段也不好啊，用来分段的话一个空行就够了。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>接下来让我们试试稍微复杂点的场景，比如列表项包含多个段落的情况：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span style="color:#007020;font-weight:bold">1.</span> 列表项中的第一段
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>   这里是第二个段落，贴段代码：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>   ```markdown
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>   要成为Markdown程序员并不容易，同理PPT架构师也是。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>   注意代码块中的中西文间并没有插入空格。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>   ```
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>   这里是最后一段了。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span style="color:#007020;font-weight:bold">2.</span> 整个有序列表是“松散”的：列表项内容要用 <span style="color:#4070a0">`&lt;p&gt;`</span> 标签
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>最后，我们试下对 GFM 的格式化支持：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>| col1                   | col2            | col3                    |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>| ---------------------- | --------------- | ----------------------- |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>| col1 without left pipe | this is col2    | col3 without right pipe |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>|                        | need align cell |                         |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span><span style="font-weight:bold">**以上就是为什么我们需要 Markdown Format，而且是带中西文自动空格的格式化。**</span>
+</code></pre>
+</details>
+<h2>✍️ 术语修正</h2>
+<p class="indent--2">Markdown 原文：</p>
+<pre style="background-color: #f0f0f0"><code class="language-md"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>在github上做开源项目是一件很开心的事情，请不要把Github拼写成`github`哦！
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>特别是简历中千万不要出现这样的情况：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#007020;font-weight:bold">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#007020;font-weight:bold">&gt; </span><span style="font-style:italic">熟练使用JAVA、Javascript、GIT，对android、ios开发有一定了解，熟练使用Mysql、postgresql数据库。
+</span></code></pre>
+<p class="indent--2">修正后：</p>
+<pre style="background-color: #f0f0f0"><code class="language-md"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>在 GitHub 上做开源项目是一件很开心的事情，请不要把 GitHub 拼写成`github`哦！
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>特别是简历中千万不要出现这样的情况：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#007020;font-weight:bold">
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#007020;font-weight:bold">&gt; </span><span style="font-style:italic">熟练使用 Java、JavaScript、Git，对 Android、iOS 开发有一定了解，熟练使用 MySQL、PostgreSQL 数据库。
+</span></code></pre>
+<h2>⚡ 性能</h2>
+<p class="indent--2">请看 <a href="https://ld246.com/article/1574570835061">Golang markdown 引擎性能基准测试</a>。</p>
+<h2>💪 健壮性</h2>
+<p class="indent--2">Lute 承载了<a href="https://ld246.com">链滴</a>上的所有 Markdown 处理，每天处理数百万解析渲染请求，运行表现稳定。</p>
+<h2>🔒 安全性</h2>
+<p class="indent--2">Lute 没有实现实现 GFM 中的 <a href="https://github.github.com/gfm/#disallowed-raw-html-extension-">Disallowed Raw HTML (extension)</a>，因为该扩展还是存在一定漏洞（比如没有处理 <code>&lt;input&gt;</code> ）。<br />
+建议通过其他库（比如 <a href="https://github.com/microcosm-cc/bluemonday">bluemonday</a>）来进行 HTML 安全过滤，这样也能更好地适配应用场景。</p>
+<h2>🛠️ 使用</h2>
+<p class="indent--2">有三种方式使用 Lute：</p>
+<ol>
+<li>后端：用 Go 语言的话引入 <code>github.com/88250/lute</code> 包</li>
+<li>后端：将 Lute 启动为一个 HTTP 服务进程供其他进程调用，具体请参考<a href="https://github.com/88250/lute-http">这里</a></li>
+<li>前端：引入 js 目录下的 lute.min.js，支持 Node.js</li>
+</ol>
+<h3>Go</h3>
+<p class="indent--2">引入 Lute 库：</p>
+<pre style="background-color: #f0f0f0"><code class="language-bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>go get -u github.com/88250/lute
+</code></pre>
+<p class="indent--2">最小化可工作示例：</p>
+<pre style="background-color: #f0f0f0"><code class="language-go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#007020;font-weight:bold">package</span> main
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#007020;font-weight:bold">import</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#4070a0">&#34;fmt&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	<span style="color:#4070a0">&#34;github.com/88250/lute&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>	luteEngine <span style="color:#666">:=</span> lute.<span style="color:#06287e">New</span>() <span style="color:#60a0b0;font-style:italic">// 默认已经启用 GFM 支持以及中文语境优化
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#60a0b0;font-style:italic"></span>	html <span style="color:#666">:=</span> luteEngine.<span style="color:#06287e">MarkdownStr</span>(<span style="color:#4070a0">&#34;demo&#34;</span>, <span style="color:#4070a0">&#34;**Lute** - A structured markdown engine.&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	fmt.<span style="color:#06287e">Println</span>(html)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>	<span style="color:#60a0b0;font-style:italic">// &lt;p&gt;&lt;strong&gt;Lute&lt;/strong&gt; - A structured Markdown engine.&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#60a0b0;font-style:italic"></span>}
+</code></pre>
+<p class="indent--2">关于代码块语法高亮：</p>
+<ul>
+<li>默认使用外部样式表，主题为 github.css，可从 chroma-styles 目录下拷贝该样式文件到项目中引入</li>
+<li>可通过 <code>lutenEngine.SetCodeSyntaxHighlightXXX()</code> 来指定高亮相关参数，比如是否启用内联样式、行号以及主题</li>
+</ul>
+<h3>JavaScript</h3>
+<p class="indent--2">简单示例可参考 JavaScript 目录下的 demo，结合前端编辑器的完整用法请参考 <a href="https://github.com/Vanessa219/vditor/tree/master/demo">Vditor 中的示例</a>。</p>
+<p class="indent--2"><img src="https://b3logfile.com/file/2020/02/%E6%88%AA%E5%9B%BE%E4%B8%93%E7%94%A8-ef21ef12.png" alt="Vditor" /></p>
+<h4>关于 <code>lute.RenderJSON()</code> 的使用</h4>
+<pre style="background-color: #f0f0f0"><code class="language-ts"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#60a0b0;font-style:italic">// JSONRenderer的类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">type</span> JSONRendererType <span style="color:#666">=</span> <span style="color:#007020">Array</span>&lt;<span style="color:#062873;font-weight:bold">JSONRendererItemType</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#60a0b0;font-style:italic">// Flag节点
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">type</span> FlagType <span style="color:#666">=</span> <span style="color:#666">|</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Paragraph&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Emphasis&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Strong&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Blockquote&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;ListItem&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Strikethrough&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;TableHead&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Table&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;TableRow&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Mark&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Sub&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Sup&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Tag&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;BlockRef&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#60a0b0;font-style:italic">// 非Flag节点
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">type</span> NotFlagType <span style="color:#666">=</span> <span style="color:#666">|</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Heading&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;ThematicBreak&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;List&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;HTMLBlock&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;InlineHTML&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;CodeBlock&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Text&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;CodeSpan&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;HardBreak&#34;</span>     
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;SoftBreak&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Link&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Image&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;HTMLEntity&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;TaskListItemMarker&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;TableCell&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;EmojiUnicode&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;EmojiImg&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;MathBlock&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;InlineMath&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;YamlFrontMatter&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;Backslash&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;BlockEmbed&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    <span style="color:#666">|</span> <span style="color:#4070a0">&#34;BlockQueryEmbed&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#007020;font-weight:bold">interface</span> JSONRendererItemType {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>    <span style="color:#007020;font-weight:bold">type</span><span style="color:#666">?:</span> <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>    value?: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>    flag?: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>    title?: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>    language?: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>    mindmap?: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>    children?: <span style="color:#902000">Array</span>&lt;<span style="color:#062873;font-weight:bold">JSONRendererItemType</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span style="color:#60a0b0;font-style:italic">// 节点分为四类：常规节点、flag节点、链接节点、代码块节点
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">interface</span> NormalNodeType {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>    <span style="color:#007020;font-weight:bold">type</span><span style="color:#666">:</span> <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>    value: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>    children?: <span style="color:#902000">Array</span>&lt;<span style="color:#062873;font-weight:bold">JSONRendererItemType</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span style="color:#007020;font-weight:bold">interface</span> FlagNodeType {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>    flag: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>    children?: <span style="color:#902000">Array</span>&lt;<span style="color:#062873;font-weight:bold">JSONRendererItemType</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span><span style="color:#60a0b0;font-style:italic">// 链接或者图片
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">interface</span> LinkNodeType {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>    <span style="color:#007020;font-weight:bold">type</span><span style="color:#666">:</span> <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>    value: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>    title: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>    children?: <span style="color:#902000">Array</span>&lt;<span style="color:#062873;font-weight:bold">JSONRendererItemType</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span><span style="color:#007020;font-weight:bold">interface</span> CodeBlockType {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>    <span style="color:#007020;font-weight:bold">type</span><span style="color:#666">:</span> <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>    value: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span>    language: <span style="color:#902000">string</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span>    mindmap?: <span style="color:#902000">string</span> <span style="color:#60a0b0;font-style:italic">// 如果language为mingmap
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span><span style="color:#60a0b0;font-style:italic"></span>}
+</code></pre>
+<p class="indent--2">一些细节：</p>
+<ol>
+<li>lute.js 没有内置语法高亮特性</li>
+<li>lute.js 编译后大小为 ~2MB，通过 <code>brotli -o lute.min.js.br lute.min.js</code> 压缩后大小 ~200KB，常规 GZip 压缩后大小 ~300KB</li>
+</ol>
+<h2>📜 文档</h2>
+<ul>
+<li><a href="https://ld246.com/article/1536377163156">《提问的智慧》精读注解版</a></li>
+<li><a href="https://ld246.com/article/1566893557720">CommonMark 规范要点解读</a></li>
+<li><a href="https://ld246.com/article/1567062979327">Lute 实现后记</a></li>
+<li><a href="https://ld246.com/article/1587637426085">Markdown 解析原理详解和 Markdown AST 描述</a></li>
+</ul>
+<h2>🏘️ 社区</h2>
+<ul>
+<li><a href="https://ld246.com/tag/lute">讨论区</a></li>
+<li><a href="https://github.com/88250/lute/issues/new/choose">报告问题</a></li>
+</ul>
+<h2>📄 授权</h2>
+<p class="indent--2">Lute 使用 <a href="http://license.coscl.org.cn/MulanPSL2">木兰宽松许可证, 第 2 版</a> 开源协议。</p>
+<h2>🙏 鸣谢</h2>
+<p class="indent--2">Lute 的诞生离不开以下开源项目，在此对这些项目的贡献者们致敬！</p>
+<ul>
+<li><a href="https://github.com/commonmark/commonmark.js">commonmark.js</a>：该项目是 CommonMark 官方参考实现的 JavaScript 版，Lute 参考了其解析器实现部分</li>
+<li><a href="https://github.com/yuin/goldmark">goldmark</a>：另一款用 golang 写的 Markdown 引擎，Lute 参考了其树遍历实现部分</li>
+<li><a href="https://gitlab.com/golang-commonmark/markdown">golang-commonmark</a>：另一款用 golang 写的 Markdown 引擎，Lute 参考了其 URL 编码以及 HTML 转义算法</li>
+<li><a href="https://github.com/alecthomas/chroma">Chroma</a>：用 golang 写的语法高亮引擎</li>
+<li><a href="https://github.com/sparanoid/chinese-copywriting-guidelines">中文文案排版指北</a>：统一中文文案、排版的相关用法，降低团队成员之间的沟通成本，增强网站气质</li>
+<li><a href="https://github.com/gopherjs/gopherjs">GopherJS</a>：将 Go 代码编译成 JavaScript 代码</li>
+</ul>
+
+</div>
+</body>
+
+</html>
